@@ -1,0 +1,144 @@
+basePath: /api/v1
+definitions:
+  model.Article:
+    properties:
+      author:
+        type: string
+      background:
+        type: string
+      content:
+        type: string
+      description:
+        type: string
+      md5:
+        type: string
+      metaData:
+        type: string
+      permission:
+        description: 是否仅自己可见之类的权限
+        type: string
+      readCount:
+        type: integer
+      status:
+        type: boolean
+      title:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server Petstore server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Gin Swagger Example API
+  version: "1.0"
+paths:
+  /post:
+    get:
+      description: 获取所有文章的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回文章列表
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/model.Article'
+              type: array
+            type: array
+      summary: 获取文章列表
+      tags:
+      - posts
+    post:
+      consumes:
+      - application/json
+      description: 通过请求体创建新的 Post
+      parameters:
+      - description: 创建的文章json数据
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/model.Article'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Article'
+      summary: 创建新的Post
+      tags:
+      - posts
+  /post/{uid}:
+    delete:
+      description: 通过路径中的文章md5对数据进行删除
+      parameters:
+      - description: 文章md5
+        in: path
+        name: uid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: 删除文章
+      tags:
+      - posts
+    get:
+      description: 通过传递文章md5获取单个文章
+      parameters:
+      - description: 文章的MD5
+        in: path
+        name: uid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Article'
+      summary: 获取单个文章详情
+      tags:
+      - posts
+    patch:
+      consumes:
+      - application/json
+      description: 通过请求体更新文章内容等
+      parameters:
+      - description: 更新数据
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/model.Article'
+      - description: 文章md5
+        in: path
+        name: uid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Article'
+      summary: 更新文章
+      tags:
+      - posts
+swagger: "2.0"
