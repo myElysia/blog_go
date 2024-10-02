@@ -20,7 +20,6 @@ func InitDB() *gorm.DB {
 		conf.CFG.Database.Database,
 		conf.CFG.Database.SSLMode,
 		conf.CFG.Database.Timezone)
-
 	var err error
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
