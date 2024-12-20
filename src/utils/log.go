@@ -1,6 +1,7 @@
 package utils
 
 import (
+	setting "blogGo/conf"
 	"fmt"
 	"os"
 	"path"
@@ -13,16 +14,13 @@ var Logging = logrus.New()
 
 func GetLogger() *logrus.Logger {
 	now := time.Now()
-	logFilePath := ""
-	if dir, err := os.Getwd(); err == nil {
-		logFilePath = dir + "/logs/"
-	}
-	if err := os.MkdirAll(logFilePath, 0777); err != nil {
+	logPath := setting.CFG.Log.OutPath
+	if err := os.MkdirAll(logPath, 0777); err != nil {
 		fmt.Println(err.Error())
 	}
 	logFileName := fmt.Sprintf("blog_server_%s.log", now.Format("2006-01-02"))
 	// 日志文件
-	fileName := path.Join(logFilePath, logFileName)
+	fileName := path.Join(logPath, logFileName)
 	if _, err := os.Stat(fileName); err != nil {
 		if _, err := os.Create(fileName); err != nil {
 			fmt.Println(err.Error())

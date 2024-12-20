@@ -1,7 +1,7 @@
 package model
 
 import (
-	"blogGo/conf"
+	settings "blogGo/conf"
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -12,14 +12,13 @@ var DB *gorm.DB
 
 func InitDB() *gorm.DB {
 	dsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s TimeZone=%s",
-		conf.CFG.Database.Host,
-		conf.CFG.Database.Port,
-		conf.CFG.Database.User,
-		conf.CFG.Database.Pass,
-		conf.CFG.Database.Database,
-		conf.CFG.Database.SSLMode,
-		conf.CFG.Database.Timezone)
+		"host=%s port=%s user=%s password=%s dbname=%s TimeZone=%s",
+		settings.CFG.Database.Host,
+		settings.CFG.Database.Port,
+		settings.CFG.Database.User,
+		settings.CFG.Database.Pass,
+		settings.CFG.Database.Database,
+		settings.CFG.Database.Timezone)
 	var err error
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})

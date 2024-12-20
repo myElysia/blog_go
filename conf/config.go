@@ -8,15 +8,14 @@ import (
 type Database struct {
 	Host     string `yaml:"host"`
 	Port     string `yaml:"port"`
-	User     string `yaml:"user"`
+	User     string `yaml:"username"`
 	Pass     string `yaml:"password"`
 	Database string `yaml:"database"`
-	SSLMode  string `yaml:"sslmode"`
 	Timezone string `yaml:"timezone"`
 }
 
 type Log struct {
-	MaxSize int `yaml:"max_size"`
+	OutPath string `yaml:"outPath"`
 }
 
 type GinConfig struct {
