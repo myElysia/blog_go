@@ -17,13 +17,17 @@ var permissionModels []interface{} = []interface{}{
 var blogModels []interface{} = []interface{}{
 	&model.Article{},
 	&model.Tag{},
-	&model.Comment{},
 	&model.Category{},
-	&model.Todo{},
+}
+
+var todoModel []interface{} = []interface{}{
+	&model.TodoInfo{},
+	&model.TodoMessage{},
 }
 
 func AutoMigrateDao(db *gorm.DB) {
 	models := append(permissionModels, blogModels...)
+	models = append(models, todoModel...)
 	err := db.AutoMigrate(models...)
 	if err != nil {
 		panic(err)
@@ -32,6 +36,7 @@ func AutoMigrateDao(db *gorm.DB) {
 
 func initQuery(db *gorm.DB) {
 	models := append(permissionModels, blogModels...)
+	models = append(models, todoModel...)
 	g := gen.NewGenerator(gen.Config{
 		OutPath:       "./src/query",
 		Mode:          gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
