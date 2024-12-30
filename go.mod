@@ -11,6 +11,7 @@ require (
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.3
 	github.com/toorop/gin-logrus v0.0.0-20210225092905-2c785434f26f
+	github.com/unrolled/secure v1.17.0
 	golang.org/x/oauth2 v0.23.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.5.9

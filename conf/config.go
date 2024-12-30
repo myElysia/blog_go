@@ -19,9 +19,12 @@ type Log struct {
 }
 
 type GinConfig struct {
-	GinMode string `yaml:"gin_mode"`
-	SSLMode string `yaml:"sslMode"`
-	GinHost string `yaml:"host"`
+	GinMode    string `yaml:"gin_mode"`
+	SSLMode    string `yaml:"sslMode"`
+	GinHost    string `yaml:"host"`
+	GinPort    int    `yaml:"port"`
+	TlsPemPath string `yaml:"tlsPem"`
+	TlsKeyPath string `yaml:"tlsKey"`
 }
 
 type GitHubAuth struct {
