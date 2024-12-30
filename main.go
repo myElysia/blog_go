@@ -1,7 +1,7 @@
 package main
 
 import (
-	"blogGo/conf"
+	settings "blogGo/conf"
 	_ "blogGo/docs"
 	"blogGo/src/model"
 	"blogGo/src/utils"
@@ -14,16 +14,35 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	ginlogrus "github.com/toorop/gin-logrus"
+	"github.com/unrolled/secure"
+	"strconv"
 	"time"
 )
 
 func setMode() {
-	ginConf := conf.CFG.GinConf
+	ginConf := settings.CFG.GinConf
 
 	if ginConf.GinMode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	} else {
 		gin.SetMode(gin.DebugMode)
+	}
+}
+
+func TlsHandler(port int) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		secureMiddleware := secure.New(secure.Options{
+			SSLRedirect: true,
+			SSLHost:     ":" + strconv.Itoa(port),
+		})
+		err := secureMiddleware.Process(c.Writer, c.Request)
+
+		// If there was an error, do not continue.
+		if err != nil {
+			return
+		}
+
+		c.Next()
 	}
 }
 
@@ -51,9 +70,11 @@ func main() {
 		}
 	}()
 
-	conf.InitConfig()
+	settings.InitConfig()
 
 	r := gin.Default()
+	r.Use(TlsHandler(settings.CFG.GinConf.GinPort))
+
 	logger := utils.GetLogger()
 	r.Use(ginlogrus.Logger(logger), gin.Recovery())
 	setMode()
@@ -90,5 +111,7 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	_ = r.Run()
+	_ = r.RunTLS(":"+strconv.Itoa(settings.CFG.GinConf.GinPort),
+		settings.CFG.GinConf.TlsPemPath,
+		settings.CFG.GinConf.TlsKeyPath)
 }
