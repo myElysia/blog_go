@@ -111,7 +111,9 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	_ = r.RunTLS(":"+strconv.Itoa(settings.CFG.GinConf.GinPort),
-		settings.CFG.GinConf.TlsPemPath,
-		settings.CFG.GinConf.TlsKeyPath)
+	if settings.CFG.GinConf.SSLMode == "true" {
+		_ = r.RunTLS(":"+strconv.Itoa(settings.CFG.GinConf.GinPort),
+			settings.CFG.GinConf.TlsPemPath,
+			settings.CFG.GinConf.TlsKeyPath)
+	}
 }
