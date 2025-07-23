@@ -115,5 +115,7 @@ func main() {
 		_ = r.RunTLS(":"+strconv.Itoa(settings.CFG.GinConf.GinPort),
 			settings.CFG.GinConf.TlsPemPath,
 			settings.CFG.GinConf.TlsKeyPath)
+	} else {
+		_ = r.Run(":" + strconv.Itoa(settings.CFG.GinConf.GinPort))
 	}
 }
