@@ -19,7 +19,7 @@ type Log struct {
 }
 
 type GinConfig struct {
-	GinMode    string `yaml:"gin_mode"`
+	GinMode    string `yaml:"ginMode"`
 	SSLMode    string `yaml:"sslMode"`
 	GinHost    string `yaml:"host"`
 	GinPort    int    `yaml:"port"`

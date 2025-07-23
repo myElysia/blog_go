@@ -33,25 +33,6 @@ type Tag struct {
 	Name       string `gorm:"comment:name;Not Null;"`
 }
 
-type Comment struct {
-	gorm.Model   `gorm:"embedded"`
-	Controller   UserInfoModel `gorm:"embedded"`
-	ArticleID    uint          `gorm:"comment:article_id;foreignKey:ArticleID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	IsTop        bool          `gorm:"comment:is_top;"`
-	Comment      string        `gorm:"comment:comment;"`
-	TopCommentID uint          `gorm:"comment:top_comment;foreignKey:CommentID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-}
-
-type Todo struct {
-	gorm.Model `gorm:"embedded"`
-	Content    string `gorm:"comment:content;Not Null;"`
-}
-
-type TimeLine struct {
-	IDModel IDModel `gorm:"embedded"`
-	Content string  `gorm:"comment:content;Not Null;"`
-}
-
 // AfterFind 钩子函数，在查询文章后刷新阅读次数(每五秒允许增加一次)
 func (ac *Article) AfterFind(tx *gorm.DB) (err error) {
 	nowTime := time.Now()
