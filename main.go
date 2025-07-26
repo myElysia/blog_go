@@ -15,6 +15,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	ginlogrus "github.com/toorop/gin-logrus"
 	"github.com/unrolled/secure"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -27,6 +28,17 @@ func setMode() {
 	} else {
 		gin.SetMode(gin.DebugMode)
 	}
+}
+
+// 中间件：仅在非 HTTPS 且非代理内部请求时重定向
+func HTTPSRedirect() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        if c.GetHeader("X-Forwarded-Proto") != "https" {
+            target := "https://" + c.Request.Host + c.Request.URL.Path
+            c.Redirect(http.StatusPermanentRedirect, target)
+            c.Abort() // 终止后续处理，避免重复写入
+        }
+    }
 }
 
 func TlsHandler(port int) gin.HandlerFunc {
@@ -73,7 +85,7 @@ func main() {
 	settings.InitConfig()
 
 	r := gin.Default()
-	r.Use(TlsHandler(settings.CFG.GinConf.GinPort))
+	//r.Use(TlsHandler(settings.CFG.GinConf.GinPort))
 
 	logger := utils.GetLogger()
 	r.Use(ginlogrus.Logger(logger), gin.Recovery())
@@ -111,6 +123,11 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// 信任 Nginx 代理的头部 (关键配置!)
+	r.SetTrustedProxies([]string{"127.0.0.1"})
+	r.ForwardedByClientIP = true
+	// 使用中间件
+	r.Use(HTTPSRedirect())
 	if settings.CFG.GinConf.SSLMode == "true" {
 		_ = r.RunTLS(":"+strconv.Itoa(settings.CFG.GinConf.GinPort),
 			settings.CFG.GinConf.TlsPemPath,
